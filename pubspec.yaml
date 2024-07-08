@@ -1,0 +1,46 @@
+name: camera_to_usb
+
+description: "Camera to USB flash or OTG"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI
+  cupertino_icons: ^1.0.6
+
+  # стейт менеджмент
+  flutter_bloc: 8.1.4
+  bloc_concurrency: 0.2.4
+
+  # хранение локальных данных
+  path_provider: ^2.1.2
+
+  # кодогенерация
+  freezed_annotation: 2.4.1
+  json_annotation: 4.8.1
+
+  # камера
+  camera: ^0.11.0+1
+  flip_card: ^0.7.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+  # кодогенерация
+  build_runner: 2.4.8
+  freezed: 2.4.7
+
+
+flutter:
+  uses-material-design: true
