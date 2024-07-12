@@ -12,145 +12,6 @@ import 'widgets/add_video_dialog.dart';
 void main() {
   runApp(const MyApp());
 }
-// class MyApp extends StatefulWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-// const directory = "Android/media/matrix/.neo";
-// class _MyAppState extends State<MyApp> {
-//   late Saf saf;
-//   var _paths = [];
-//   @override
-//   void initState() {
-//     Permission.storage.request();
-//     saf = Saf(directory);
-//     super.initState();
-//   }
-//
-//   loadImage(paths, {String k = ""}) {
-//     var tempPaths = [];
-//     for (String path in paths) {
-//       if (path.endsWith(".jpg")) {
-//         tempPaths.add(path);
-//       }
-//     }
-//     if (k.isNotEmpty) tempPaths.add(k);
-//     _paths = tempPaths;
-//     setState(() {});
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Saf example app'),
-//         ),
-//         body: Center(
-//           child: SingleChildScrollView(
-//             child: Column(
-//               children: [
-//                 if (_paths.isNotEmpty)
-//                   ..._paths.map(
-//                         (path) => Card(
-//                       child: Image.file(
-//                         File(path),
-//                       ),
-//                     ),
-//                   )
-//               ],
-//             ),
-//           ),
-//         ),
-//         bottomNavigationBar: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             ElevatedButton(
-//               style: ButtonStyle(
-//                 backgroundColor:
-//                 MaterialStateProperty.all(Colors.deepPurpleAccent),
-//               ),
-//               onPressed: () async {
-//                 final pp = await getExternalStorageDirectories();
-//                 pp?.forEach((d) => print(d.parent.path));
-//                 // final r = await saf.getFilesPath();
-//                 // r?.forEach(print);
-//                 // final t = await saf.cache();
-//                 // t?.forEach(print);
-//                 // final e = await saf.getCachedFilesPath();
-//                 // e?.forEach(print);
-//                 //Saf.releasePersistedPermissions();
-//               },
-//               child: const Text("Release*"),
-//             ),
-//             ElevatedButton(
-//               style: ButtonStyle(
-//                 backgroundColor:
-//                 MaterialStateProperty.all(Colors.blueGrey.shade700),
-//               ),
-//               onPressed: () async {
-//                 var cachedFilesPath = await saf.cache();
-//                 if (cachedFilesPath != null) {
-//                   loadImage(cachedFilesPath);
-//                 }
-//               },
-//               child: const Text("Cache"),
-//             ),
-//             ElevatedButton(
-//               style: ButtonStyle(
-//                 backgroundColor: MaterialStateProperty.all(Colors.green),
-//               ),
-//               onPressed: () async {
-//                 var isSync = await saf.sync();
-//                 if (isSync as bool) {
-//                   var _paths = await saf.getCachedFilesPath();
-//                   loadImage(_paths);
-//                 }
-//               },
-//               child: const Text("Sync"),
-//             ),
-//             ElevatedButton(
-//               style: ButtonStyle(
-//                 backgroundColor: MaterialStateProperty.all(Colors.orange),
-//               ),
-//               onPressed: () async {
-//                 var isClear = await saf.clearCache();
-//                 if (isClear != null && isClear) {
-//                   loadImage([]);
-//                 }
-//               },
-//               child: const Text("Clear"),
-//             ),
-//           ],
-//         ),
-//         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-//         floatingActionButton: FloatingActionButton(
-//           elevation: 30.0,
-//           backgroundColor: Colors.black,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: const [
-//               Text(
-//                 "GRANT",
-//                 style: TextStyle(fontSize: 13, color: Colors.red),
-//               ),
-//               Text(
-//                 "Permission",
-//                 style: TextStyle(fontSize: 7.8, color: Colors.red),
-//               )
-//             ],
-//           ),
-//           onPressed: () async {
-//             await saf.getDirectoryPermission(isDynamic: true);
-//
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -206,3 +67,83 @@ class MyHomePage extends StatelessWidget {
     // );
   }
 }
+
+
+/// <<< от CHAT-GPT >>>
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:usb_serial/usb_serial.dart';
+//
+// void main() => runApp(MyApp());
+//
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: VideoSaveScreen(),
+//     );
+//   }
+// }
+//
+// class VideoSaveScreen extends StatefulWidget {
+//   @override
+//   _VideoSaveScreenState createState() => _VideoSaveScreenState();
+// }
+//
+// class _VideoSaveScreenState extends State<VideoSaveScreen> {
+//   UsbDevice _device;
+//   UsbPort _port;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeUsbDevice();
+//   }
+//
+//   Future<void> _initializeUsbDevice() async {
+//     List<UsbDevice> devices = await UsbSerial.listDevices();
+//     if (devices.isNotEmpty) {
+//       _device = devices[0];
+//       _port = await _device.create();
+//     }
+//   }
+//
+//   Future<void> _saveVideoToUsb() async {
+//     if (_port == null) {
+//       print('USB device not connected');
+//       return;
+//     }
+//
+//     // Получаем временный каталог приложения
+//     Directory tempDir = await getTemporaryDirectory();
+//     String tempPath = tempDir.path;
+//     String videoFilePath = '$tempPath/sample_video.mp4';
+//
+//     // Записываем тестовый видеофайл во временный каталог
+//     File videoFile = File(videoFilePath);
+//     await videoFile.writeAsBytes([/* данные вашего видео */]);
+//
+//     // Копируем файл на USB-флешку
+//     String usbPath = '/storage/usb_storage/sample_video.mp4';
+//     File usbFile = File(usbPath);
+//     await usbFile.writeAsBytes(await videoFile.readAsBytes());
+//
+//     print('Video saved to USB: $usbPath');
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Save Video to USB'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: _saveVideoToUsb,
+//           child: Text('Save Video'),
+//         ),
+//       ),
+//     );
+//   }
+// }
