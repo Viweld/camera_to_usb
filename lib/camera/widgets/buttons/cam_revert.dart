@@ -24,7 +24,8 @@ class CamRevert extends StatelessWidget {
                 onPressed: () => state.camProperty?.camIndex == 0
                     ? onPress.call(1)
                     : onPress.call(0),
-                child: const Icon(Icons.swap_horiz, color: Colors.white, size: 32),
+                child:
+                    const Icon(Icons.swap_horiz, color: Colors.white, size: 32),
               ),
             ),
     );

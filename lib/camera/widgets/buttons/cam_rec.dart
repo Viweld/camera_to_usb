@@ -16,13 +16,14 @@ class CamRec extends StatelessWidget {
           ? const SizedBox()
           : Positioned(
               bottom: 30,
-              left: MediaQuery.of(context).size.width *0.5  - 25,
+              left: MediaQuery.of(context).size.width * 0.5 - 25,
               child: MaterialButton(
                 minWidth: 0,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(7.5),
                 onPressed: onPress,
-                child: const Icon(Icons.fiber_manual_record, color: Colors.white, size: 32),
+                child: const Icon(Icons.fiber_manual_record,
+                    color: Colors.white, size: 32),
               ),
             ),
     );

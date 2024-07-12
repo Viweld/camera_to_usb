@@ -23,7 +23,8 @@ class CamPause extends StatelessWidget {
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(5),
                     onPressed: onPress,
-                    child: const Icon(Icons.pause_rounded, color: Colors.white, size: 32),
+                    child: const Icon(Icons.pause_rounded,
+                        color: Colors.white, size: 32),
                   ),
                 ),
     );

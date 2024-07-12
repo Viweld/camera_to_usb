@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:permission_handler/permission_handler.dart';
+import 'package:saf/saf.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -65,6 +66,9 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     Emitter<CameraState> emit,
   ) async {
     try {
+      await Permission.storage.request();
+      await Permission.manageExternalStorage.request();
+
       final cameras = state.camProperty?.cameras ?? await availableCameras();
       final camProperty = await _initializeCamera(cameras, 1);
       emit(
@@ -115,13 +119,30 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
     if (camProperty == null) return;
     if (!camProperty.controller.value.isRecordingVideo) return;
     _timer?.cancel();
-    final extDir = await getApplicationDocumentsDirectory();
-    final dirPath = '${extDir.path}/Movies/flutter_camera';
+    final file = await state.camProperty?.controller.stopVideoRecording();
+    //final extDir = await getApplicationDocumentsDirectory();
+
+    // Находит 2 внешних пути:
+    // Directory: '/storage/emulated/0/Android/data/com.example.camera_to_usb/files'
+    // Directory: '/storage/419D-1E19/Android/data/com.example.camera_to_usb/files'
+    final dirs = await getExternalStorageDirectories();
+    print('-----------------<dirs>');
+    dirs?.forEach(print);
+    print('-----------------<dirs>');
+
+    // Взял вручную "/storage/419D-1E19/"
+    const dirPath = '/storage/419D-1E19/Movies';
+
+    // Если указанной директории не существует, то она будет создана:
     await Directory(dirPath).create(recursive: true);
     final filePath =
         '$dirPath/${DateTime.now().millisecondsSinceEpoch.toString()}.mp4';
-    final file = await state.camProperty?.controller.stopVideoRecording();
     await file?.saveTo(filePath);
+
+    print('-----------------<filePath> полный path к файлу');
+    print(filePath);
+    print('-----------------<filePath>');
+
     emitter(
       state.copyWith(
         recorded: file,

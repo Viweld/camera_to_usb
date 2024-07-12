@@ -7,7 +7,6 @@ import 'buttons/cam_pause.dart';
 import 'buttons/cam_rec.dart';
 import 'buttons/cam_revert.dart';
 import 'buttons/cam_stop.dart';
-import 'cam_progress_bar.dart';
 
 class CameraCore extends StatelessWidget {
   const CameraCore({
@@ -75,7 +74,7 @@ class CameraCore extends StatelessWidget {
                   Positioned(
                     top: 0,
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(20,60, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
                       width: MediaQuery.of(context).size.width,
                       color: Colors.black54,
                       child: Text(
